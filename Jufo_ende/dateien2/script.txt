@@ -1,0 +1,7 @@
+fahre gerade aus
+stop
+lenke links 45
+lenke links 90
+lenke rechts 45
+lenke rechts 90
+hilfe

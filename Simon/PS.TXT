@@ -1,0 +1,51 @@
+šbrigens: ich habe jetzt einen neuen Palettenbefehl in die Konrad.pas/tpu
+integriert: "SetMypalette"
+Kurzbeschreibung:
+Setmypalette setzt den Palettenwert einer einzigen Farbe sofort
+-> geht viel schneller, als wenn du wegen einer einzigen anderen Farbe
+  die ganze Palette bergibst
+  !Achtung: Die nderung wird standardm„ssig nicht im array "palette"
+   vermerkt (wenn du's doch brauchst, s. unten)
+1. Syntax:
+ÄÄÄÄÄÄÄÄÄ
+SetMyPalette(Nr der Farbe,R,G,B:byte); -> "Setpalette" gibts schon
+
+ Beispiel: SetMyPalette(15,63,63,63); setzt Farbe 15 auf weiss
+
+2. Vorgehen:
+ÄÄÄÄÄÄÄÄÄÄÄ
+Also, ich habe dir doch mal Setpal erkl„rt...
+ ³Wiederholung:
+ ³ 1. dem Port $3c8 (Statusport, glaube ich) sagen: ich fange mit Farbe null an
+ ³ 2. die ganzen Farben an Port $3c9 bergeben, der Palettenz„hler geht automatisch weiter
+-> Setzen einer einzigen Farbe:
+ 1. Port $3c8 <- Nr. der Farbe
+ 2. Port $3c9 <- R, dann G, dann B
+
+3. Aufbau
+ÄÄÄÄÄÄÄÄÄ
+Also, erstmal die Asm-Fassung, die du wahrscheinlich sowieso nicht liest,
+deshalb kommt danach die Pascal-Version
+(die asm-Version k”nnte ein paar Nanosekndchen schneller sein,
+nichts von Bedeutung...)
+Procedure SetmyPalette(nr,r,g,b:byte);assembler;
+asm
+ mov dx,03c8h
+ mov al,nr
+ out dx,al
+ inc dx
+ mov al,r
+ out dx,al
+ mov al,g
+ out dx,al
+ mov al,b
+ out dx,al
+End;
+
+{SetMyPalette-Spezial-Simon-Pascal-Edition}
+Procedure SetMyPalette(nr,r,g,b:byte);
+Begin
+ port[$3d8]:=nr;
+ port[$3d9]:=r;port[$3d9]:=g;port[$3d9]:=b;{einfach, oder?...}
+End;
+
